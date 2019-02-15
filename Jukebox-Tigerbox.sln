@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jukebox.Tigerbox", "Jukebox-Tigerbox\Jukebox.Tigerbox.csproj", "{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Objects", "TigerboxPlayer\Tigerbox.Objects.csproj", "{37EE587C-BA08-4505-9ECF-198E26DDE335}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Spec", "Tigerbox.Spec\Tigerbox.Spec.csproj", "{2822F3CF-2CB5-4486-8A36-11076049A2A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Forms", "Tigerbox.Forms\Tigerbox.Forms.csproj", "{515B4DE1-7755-4092-ADFB-A2A7014A4F1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.IOC", "TigerIOC\Tigerbox.IOC.csproj", "{65C6DA52-F188-4B51-A592-B4442BCA12A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Exceptions", "Tigerbox.Exceptions\Tigerbox.Exceptions.csproj", "{C7E937DE-3650-49D3-B47B-1DFAEA814981}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Database.Update", "Tigerbox.Database.Update\Tigerbox.Database.Update.csproj", "{8242BF78-C595-4ED5-98C4-88311FB8F01F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiger.Player", "Tiger.Player\Tiger.Player.csproj", "{CDD674BC-0E9D-4919-B7BB-9BFF06F9E27A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.LetterPanel", "Tigerbox.LetterPanel\Tigerbox.LetterPanel.csproj", "{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Services", "Tigerbox.Services\Tigerbox.Services.csproj", "{C6D04CD5-2511-48FA-9172-2CE67A826198}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Mangers", "Tigerbox.Mangers\Tigerbox.Mangers.csproj", "{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.SiteControl", "Tigerbox.SiteControl\Tigerbox.SiteControl.csproj", "{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37EE587C-BA08-4505-9ECF-198E26DDE335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37EE587C-BA08-4505-9ECF-198E26DDE335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37EE587C-BA08-4505-9ECF-198E26DDE335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37EE587C-BA08-4505-9ECF-198E26DDE335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2822F3CF-2CB5-4486-8A36-11076049A2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2822F3CF-2CB5-4486-8A36-11076049A2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2822F3CF-2CB5-4486-8A36-11076049A2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2822F3CF-2CB5-4486-8A36-11076049A2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515B4DE1-7755-4092-ADFB-A2A7014A4F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515B4DE1-7755-4092-ADFB-A2A7014A4F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515B4DE1-7755-4092-ADFB-A2A7014A4F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515B4DE1-7755-4092-ADFB-A2A7014A4F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C6DA52-F188-4B51-A592-B4442BCA12A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C6DA52-F188-4B51-A592-B4442BCA12A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C6DA52-F188-4B51-A592-B4442BCA12A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C6DA52-F188-4B51-A592-B4442BCA12A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7E937DE-3650-49D3-B47B-1DFAEA814981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E937DE-3650-49D3-B47B-1DFAEA814981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E937DE-3650-49D3-B47B-1DFAEA814981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E937DE-3650-49D3-B47B-1DFAEA814981}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8242BF78-C595-4ED5-98C4-88311FB8F01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8242BF78-C595-4ED5-98C4-88311FB8F01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8242BF78-C595-4ED5-98C4-88311FB8F01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8242BF78-C595-4ED5-98C4-88311FB8F01F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD674BC-0E9D-4919-B7BB-9BFF06F9E27A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD674BC-0E9D-4919-B7BB-9BFF06F9E27A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD674BC-0E9D-4919-B7BB-9BFF06F9E27A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD674BC-0E9D-4919-B7BB-9BFF06F9E27A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {530109F3-1D16-437C-A7C3-B8798EC4D7EF}
+	EndGlobalSection
+EndGlobal

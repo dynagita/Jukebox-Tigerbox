@@ -1,0 +1,27 @@
+﻿<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="form-horizontal">
+            <label for="txtArtist" class="control-label col-md-2 col-sm-2 col-xs-2">Artist: </label>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <input class="form-control" style="max-width: 100% !important;" type="text" id="txtSearch" />
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4">
+                <i id="btnSearch" title="Search" class="fa fa-2x fa-search tigerIcon tigerClick"></i>
+                <i id="btnCleanFilter" style="margin-left: 5px;" title="Clean" class="fa fa-2x fa-eraser tigerIcon tigerClick "></i>
+            </div>
+        </div>        
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <hr />
+        <div class="col-md-offset-4 col-md-8 col-sm-offset-2 col-sm-8 col-xs-offset-2 col-xs-8" id="folders">
+            @Html.Action("Folders")
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" id="medias">
+            <br />
+            @Html.Action("Musics")
+        </div>
+    </div>
+</div>
+
+

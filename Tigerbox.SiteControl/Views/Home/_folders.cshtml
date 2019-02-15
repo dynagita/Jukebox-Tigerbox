@@ -1,0 +1,64 @@
+﻿@model System.Collections.Generic.IList<Tigerbox.Objects.TigerFolder>
+
+<div id="folderCaresoul" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        @{
+            for (int i = 0; i < Model.Count; i++)
+            {
+                var active = string.Empty;
+                if (i == 0)
+                {
+                    active = "active";
+                }
+
+                <div class='item @active'>
+                    @{
+                        var folder = Model[i];
+                    }
+
+                    @{
+                        var path = folder.ImagePath.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
+                        string url = string.Format("data:image/{0};base64,{1}", "png", Session["NoImage"]);
+                        string labelVisible = "block";
+                        if (path.Length > 0)
+                        {
+                            labelVisible = "none";
+                            string type = path[path.Length - 1];
+                            url = string.Format("data:image/{0};base64,{1}", type.Substring(type.IndexOf(".") + 1, type.Length - (type.IndexOf(".") + 1)), folder.GetImageBase64());
+                        }
+                    }
+                    <a onclick="LoadMedias()">
+                        <img src="@url" alt="@folder.Name">
+                        <div class="carousel-caption">
+                            <h3 style="display:@labelVisible; text-shadow: 2px 2px #222 !important;color: #e9cb1a !important;">@folder.Name</h3>
+                            <div id='selectedFolder' style="visibility: hidden;">@Model[i].Name</div>
+                        </div>
+                    </a>
+
+                </div>
+            }
+
+        }
+    </div>
+</div>
+
+<a class="left carousel-control" href="#folderCaresoul" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+</a>
+<a class="right carousel-control" href="#folderCaresoul" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+</a>
+
+<script>
+    $('.carousel').carousel({
+        interval: false
+    });
+    $('.carousel-control').click(function (evt) {
+        setTimeout(function () {
+            LoadMedias();
+        }, 1000);
+        
+    });
+</script>

@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <title>Jukebox - Tigerbox</title>
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script>
+
+        function GetSelectedAlbum() {
+            var activeItem = $(".active");
+            return $(activeItem).find("#selectedFolder").text();
+        }
+
+        function LoadMedias() {
+
+            var folderName = GetSelectedAlbum();
+
+            $.ajax({
+                url: "@Url.Action("GetMusicsByFolder")",
+                method: "POST",
+                data: { folderName: folderName },
+                dataType: "html",
+                success: function (result) {
+                    $("#medias").empty();
+                    $("#medias").append(result);
+                }
+            });
+        }
+
+        function changeToLoadModal() {
+            var div = "<div class='col-md-12 align-center'><i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i></div><br /><br />";
+            changeModalData("Loading", div, "", "", undefined);
+        }
+
+        function applySelectedMedia() {
+
+            changeToLoadModal();
+
+            var folderName = GetSelectedAlbum();
+
+            $.ajax({
+                url: "@Url.Action("SelectMedia")",
+                method: "POST",
+                dataType: 'json',
+                data: { folderName: folderName, musicName: selectedMedia },
+                success: function (result) {
+                    var title;
+                    if (result.Success) {
+                        title = "Sucesso";
+                    } else {
+                        title = "Error";
+                    }
+                    changeModalData(title, result.Message, "", "Ok", undefined);
+                }
+            });
+        }
+
+        selectedMedia = "";
+
+        function selectMedia(music) {
+
+            var compName = "#mediaNameDiv" + music;
+            var mediaName = $(compName).text();
+            selectedMedia = mediaName;
+            var message = "Deseja realmente selecionar a media '" + mediaName + "'?";
+            loadModal("Confirmação", message, "<i class='fa fa-play customFaSize'></i>", "Não", applySelectedMedia);
+        }
+
+        function changeModalData(title, body, yesButton, noButton, func) {
+            $("#modalTitle").empty();
+            $("#modalTitle").append(title);
+
+            $("#modalBody").empty();
+            $("#modalBody").append(body);
+
+            if (yesButton !== "") {
+                $("#btnYes").empty();
+                $("#btnYes").append(yesButton);
+                $("#btnYes").show();
+            } else {
+                $("#btnYes").hide();
+            }
+
+            if (noButton !== "") {
+                $("#btnNo").empty();
+                $("#btnNo").append(noButton);
+                $("#btnNo").show();
+            } else {
+                $("#btnNo").hide();
+            }
+            if (func == null || func == undefined) {
+                $("#btnYes").unbind("click");
+            } else {
+                $("#btnYes").click(func);
+            }
+
+        }
+
+        function loadModal(title, body, yesButton, noButton, func) {
+            $("#modalTitle").empty();
+            $("#modalTitle").append(title);
+
+            $("#modalBody").empty();
+            $("#modalBody").append(body);
+
+            if (yesButton !== "") {
+                $("#btnYes").empty();
+                $("#btnYes").append(yesButton);
+                $("#btnYes").show();
+            } else {
+                $("#btnYes").hide();
+            }
+
+            if (noButton !== "") {
+                $("#btnNo").empty();
+                $("#btnNo").append(noButton);
+                $("#btnNo").show();
+            } else {
+                $("#btnNo").hide();
+            }
+
+            $("#btnModalLaunch").click();
+
+            if (func == null || func == undefined) {
+                $("#btnYes").unbind("click");
+            } else {
+                $("#btnYes").click(func);
+            }
+
+        }
+
+        function search() {
+            var div = "<div class='col-md-12 align-center'><i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i></div><br /><br />";
+            loadModal("Loading", div, "", "", function () { });
+
+            var text = $("#txtSearch").val();
+
+            if (text == undefined || text == null || text == "") {
+                $("#btnCleanFilter").click();
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("Search")",
+                method: "POST",
+                data: { text: text },
+                dataType: "html",
+                success: function (result) {
+                    var albuns = $(result).find(".item");
+                    if ($(albuns).length <= 0) {
+                        $("#folders").empty();
+                        $("#folders").append("<h3>'"+text+"' not found.</h3>");
+                        $("#btnNo").click();
+                        $("#medias").empty();
+                    } else {
+                        $("#folders").empty();
+                        $("#folders").append(result);
+                        $("#btnNo").click();
+                        LoadMedias();
+                    }
+
+                },
+                error: function (x, y, error) {
+                    changeModalData("Error", error, "", "Close", undefined);
+                }
+
+            });
+        }
+        
+        function setTigerBoxAction(action) {
+            $.ajax({
+                url: "@Url.Action("SetTigerBoxAction")",
+                method: "POST",
+                data: { action: action },
+                dataType: "json",
+                success: function (json) {
+                    if (!json.Success) {
+                        loadModal("Error", json.Message, "", "Close", undefined);
+                    }
+                },
+                error: function (x, y, error) {
+                    loadModal("Error", error, "", "Close", undefined);
+                }
+            });
+        }        
+
+    </script>
+
+    <style>
+        #folders {
+            max-width: 300px;
+            height: auto;
+        }
+
+        body {
+            padding-top: 10px !important;
+            padding-bottom: 0 !important;
+        }
+
+        .selectedFolder {
+            color: orangered !important;
+        }
+
+        .navTitle {
+            color: white;
+            background-color: rgb(70,70,70);
+        }
+
+        .h2 {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .align-center {
+            text-align: center;
+        }
+
+        .body-content {
+            padding: unset !important;
+        }
+
+        .tigerIcon {
+            color: orangered;
+        }
+
+        .tigerClick {
+            cursor: pointer !important;
+        }
+
+        .align-left {
+            text-align: left;
+        }
+
+        .imgFolder {
+            max-width: 200px;
+            min-width: 80px;
+            width: 100%;
+            height: auto;
+        }
+
+        .tigerAlbum {
+            min-height: 190px;
+            max-width: 230px;
+            text-align: center !important;
+            cursor: pointer;
+            float: left;
+            margin-bottom: 25px;
+        }
+
+        .carousel {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .carousel-inner {
+            cursor: pointer;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #F4F4F4;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            background: #F4F4F4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dad7d7;
+        }
+
+        @@media (max-width: 990px) {
+            .albuns {
+                max-height: 450px !important;
+            }
+
+            .h2 {
+                text-align: center;
+                margin-top: unset;
+            }
+
+            .controls {
+                text-align: center !important;
+            }
+        }
+
+        .imgListIcon {
+            width: 16px;
+            height: auto;
+        }
+
+        .tigerMedia {
+            border-bottom: 1px solid rgb(200,200,200);
+            color: rgb(100,100,100);
+            z-index: 100;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            cursor: pointer;
+            min-height: 30px;
+        }
+
+            .tigerMedia:hover {
+                background-color: orangered !important;
+                color: white;
+                border-radius: 10px;
+            }
+
+        a:hover {
+            color: orangered;
+            text-decoration: none;
+        }
+
+        .modal-header {
+            background-color: rgb(130,130,130);
+            color: whitesmoke;
+        }
+
+        #btnYes {
+            background-color: orangered;
+            color: whitesmoke;
+            border: 1px solid #a50000;
+        }
+
+        .customFaSize {
+            font-size: 1.4em !important;
+        }
+
+        .align-center {
+            text-align: center !important;
+        }
+
+        .adminControl {
+            padding-left: 10px;
+            padding-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+
+        <button id="btnModalLaunch" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#dialogModal" style="visibility: hidden"></button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="dialogModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="dialogModalLabel"><span id="modalTitle"></span></h4>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNo">Nâo</button>
+                        <button type="button" class="btn btn-primary" id="btnYes">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar navbar-inverse navTitle">
+        <div class="container">
+            <div class="col-lg-2 col-md-2 col-xs-12 col-sm-12 align-center">
+                <img class="imgTitle" src="~/Data/tiger.png" />
+            </div>
+            @{
+                if ((bool)Session["AdminUser"])
+                {
+                    Html.RenderPartial("_controls");
+                }
+            }
+        </div>
+        <div class="col-md-12 text-right" style="padding-top: 15px;">
+            Tigerbox by Daniel Yanagita
+        </div>
+    </div>        
+    <script>
+        $("#btnSearch").click(search);
+        $("#btnCleanFilter").click(function () { location.reload(); });
+
+        $("#txtSearch").keydown(function (evt) {
+            var code = evt.keyCode || evt.which;
+            if (code == 13) {
+                $("#btnSearch").click();
+            }
+        });
+    </script>
+</body>
+</html>
