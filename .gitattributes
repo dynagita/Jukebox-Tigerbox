@@ -1,0 +1,16 @@
+special-vendored-path/* linguist-vendored
+jquery.js linguist-vendored=false
+jquery.validate.js linguist-vendored=false
+jquery.validate.min.js linguist-vendored=false
+jquery.validate.unobtrusive.js linguist-vendored=false
+jquery.validate.unobtrusive.min.js linguist-vendored=false
+jquery.validate-vsdoc.js linguist-vendored=false
+jquery-3.3.1.intellisense.js linguist-vendored=false
+jquery-3.3.1.js linguist-vendored=false
+jquery-3.3.1.min.map linguist-vendored=false
+jquery-3.3.1.slim.js linguist-vendored=false
+jquery-3.3.1.slim.min.js linguist-vendored=false
+jquery-3.3.1.slim.min.map linguist-vendored=false
+modernizr-2.8.3.js linguist-vendored=false
+bootstrap.js linguist-vendored=false
+bootstrap.min.js linguist-vendored=false
