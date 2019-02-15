@@ -328,3 +328,36 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+Jukebox-Tigerbox/bin
+Jukebox-Tigerbox/obj
+Tigerbox.Spec/bin
+Tigerbox.Spec/obj
+Tigerbox.Exceptions/bin
+Tigerbox.Exceptions/obj
+Tigerbox.Forms/bin
+Tigerbox.Forms/obj
+TigerboxPlayer/bin
+TigerboxPlayer/obj
+TigerIOC/bin
+TigerIOC/obj
+Tigerbox-Tests/bin
+Tigerbox-Tests/obj
+Tigerbox.Database.Update/bin
+Tigerbox.Database.Update/obj
+Data/
+.vs
+.vs/Jukebox-Tigerbox
+Tiger.Player/bin
+Tiger.Player/obj
+Images
+Tigerbox.LetterPanel/bin
+TestResults/
+Tigerbox.LetterPanel/obj
+Tigerbox.Services/bin
+Tigerbox.Services/obj
+Tigerbox.Mangers/bin
+Tigerbox.Mangers/obj
+Tigerbox.SiteControl/Data
+Tigerbox.SiteControl/Bin
+Tigerbox.SiteControl/Obj
