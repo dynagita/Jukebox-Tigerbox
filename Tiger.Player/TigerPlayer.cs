@@ -12,11 +12,14 @@ using Tigerbox.Objects;
 using Tigerbox.Exceptions;
 using AxWMPLib;
 using System.Threading;
+using WMPLib;
 
 namespace Tiger.Player
 {
     public partial class TigerPlayer : UserControl
     {
+        private IWMPMedia _lastPlayedMedia = null;
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -109,7 +112,7 @@ namespace Tiger.Player
         public void Play()
         {
             try
-            {
+            {                
                 _mediaPlayer.Ctlcontrols.play();
             }
             catch (Exception)
@@ -233,6 +236,24 @@ namespace Tiger.Player
                     _mediaPlayer.currentPlaylist.removeItem(_mediaPlayer.currentPlaylist.Item[i]);
                 }
             }
+        }
+
+        public void UpdatePlayList()
+        {
+            if (_lastPlayedMedia != null)
+            {
+                _mediaPlayer.currentPlaylist.removeItem(_lastPlayedMedia);   
+            }
+
+            if (_mediaPlayer.currentPlaylist.count == 0)
+            {
+                _lastPlayedMedia = null;
+            }
+            else
+            {
+                _lastPlayedMedia = _mediaPlayer.currentMedia;
+            }
+            
         }
     }
 }

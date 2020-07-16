@@ -559,15 +559,20 @@ namespace Tigerbox.Forms
         private void ChangePlayerStateEvent(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
             //1 - Media Ended / 9 - Transitoring
-            if (e.newState == 3)
+            if (e.newState == 1)
+            {
+                _player.Stop();
+            }
+            else if (e.newState == 3)
             {
                 this.TakeOutFirstSelectedSong();
+                _player.UpdatePlayList();
             }
-            if (e.newState == 8 && this._listViewSelectedSongs.Items.Count == 0)
+            else if (e.newState == 8 && this._listViewSelectedSongs.Items.Count == 0)
             {
                 _player.ClearPlayList();
                 SetSongsFocus();
-            }
+            }            
             return;
         }
 
