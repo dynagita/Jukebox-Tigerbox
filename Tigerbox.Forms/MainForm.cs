@@ -80,7 +80,7 @@ namespace Tigerbox.Forms
 
         public StopThreadManager StopThreadManager;
 
-        private bool debug = true;
+        private bool debug = false;
 
         IConfigurationService _configurationService;
 
