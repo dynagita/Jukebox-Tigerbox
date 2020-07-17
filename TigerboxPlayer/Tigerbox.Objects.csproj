@@ -52,6 +52,7 @@
     <Compile Include="DatabaseUpdateSystem.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="KeyboardListener.cs" />
+    <Compile Include="TigerBoxMessage.cs" />
     <Compile Include="TigerFolder.cs" />
     <Compile Include="TigerMedia.cs" />
     <Compile Include="TigerNetworkData.cs" />

@@ -196,9 +196,9 @@ namespace Tiger.Player
         {
             if (_mediaPlayer != null)
             {
-                if (this._mediaPlayer.settings.volume >= 5)
+                if (this._mediaPlayer.settings.volume < 100)
                 {
-                    this._mediaPlayer.settings.volume -= 5;
+                    this._mediaPlayer.settings.volume += 5;
                 }
             }
         }
@@ -210,9 +210,9 @@ namespace Tiger.Player
         {
             if (_mediaPlayer != null)
             {
-                if (this._mediaPlayer.settings.volume <= 100)
+                if (this._mediaPlayer.settings.volume >= 5)
                 {
-                    this._mediaPlayer.settings.volume += 5;
+                    this._mediaPlayer.settings.volume -= 5;
                 }
             }            
         }

@@ -12,6 +12,7 @@ using static System.Windows.Forms.ImageList;
 using Tigerbox.Exceptions;
 using static Tigerbox.Objects.Enums;
 using System.Timers;
+using System.Messaging;
 
 namespace Tigerbox.Forms
 {
@@ -79,6 +80,11 @@ namespace Tigerbox.Forms
 
         public StopThreadManager StopThreadManager;
 
+        private bool debug = true;
+
+        IConfigurationService _configurationService;
+
+        System.Timers.Timer _queueTimer;
         #endregion
 
         #region Creating Form
@@ -88,11 +94,14 @@ namespace Tigerbox.Forms
         /// </summary>
         private void CustomInitializeComponent(IConfigurationService configuration, IJsonService jsonUtil)
         {
-            //Comment to debug
-            this.TopMost = true;
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
-            //Comment to debug
+            _configurationService = configuration;
+
+            if (!debug)
+            {
+                this.TopMost = true;
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+            }
 
             this._pages = new TigerPages(configuration, jsonUtil);
 
@@ -104,7 +113,7 @@ namespace Tigerbox.Forms
 
             this._listViewFolderSongs.KeyDown += ListView_KeyEvent;
             this._listViewFolderSongs.KeyUp += ListView_KeyEvent;
-            
+
 
             //Player
             this._player = new TigerPlayer();
@@ -147,6 +156,11 @@ namespace Tigerbox.Forms
             StartFullScreenTimer();
 
             this._listViewSelectedSongs.Scrollable = true;
+
+            _queueTimer = new System.Timers.Timer(500);
+            _queueTimer.Elapsed += new ElapsedEventHandler(ReadFromQueue);
+            _queueTimer.AutoReset = true;
+            _queueTimer.Enabled = true;
         }
 
         /// <summary>
@@ -491,7 +505,7 @@ namespace Tigerbox.Forms
             else if (key == 78)
             {
                 result = TigerActions.DecreaseVolume;
-            }            
+            }
             return result;
         }
 
@@ -518,7 +532,7 @@ namespace Tigerbox.Forms
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
-            {                
+            {
                 _player.Stop();
                 _player.DisposePlayer();
                 _player.Dispose();
@@ -558,12 +572,7 @@ namespace Tigerbox.Forms
         /// <param name="e"></param>
         private void ChangePlayerStateEvent(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
-            //1 - Media Ended / 9 - Transitoring
-            if (e.newState == 1)
-            {
-                _player.Stop();
-            }
-            else if (e.newState == 3)
+            if (e.newState == 3)
             {
                 this.TakeOutFirstSelectedSong();
                 _player.UpdatePlayList();
@@ -572,7 +581,7 @@ namespace Tigerbox.Forms
             {
                 _player.ClearPlayList();
                 SetSongsFocus();
-            }            
+            }
             return;
         }
 
@@ -607,6 +616,7 @@ namespace Tigerbox.Forms
             {
                 SetSongsFocus();
             }
+
         }
 
         /// <summary>
@@ -739,9 +749,9 @@ namespace Tigerbox.Forms
 
             if (index >= 0)
             {
-                this._listViewFolderSongs.SelectedIndices.Add(index);                
+                this._listViewFolderSongs.SelectedIndices.Add(index);
                 if (this._listViewFolderSongs.Items[index].Position.Y < 0)
-                {                   
+                {
                     this._listViewFolderSongs.TopItem = this._listViewFolderSongs.Items[index];
                 }
 
@@ -1035,7 +1045,7 @@ namespace Tigerbox.Forms
                         this.letterPanel1.Start();
                         StartLetterPanelTimer();
                     }
-                    break;                
+                    break;
                 case TigerActions.MoveEntirePage:
                     MoveEntirePage();
                     break;
@@ -1114,24 +1124,25 @@ namespace Tigerbox.Forms
             {
                 _sharedList.DecreaseCredit();
 
-                var lvItem = GetMediaItem(media, -1);
-
-                InsertMediaToSelectedList(lvItem);
-
-                _player.AddMediaToPlayList(media);
+                var mediaIndex = -1;
 
                 _sharedList.InsertNewMedia<TigerMedia>(media);
 
-                Play();
+                ListViewItem lv = GetMediaItem(media, mediaIndex);
 
-                LoadCredits();
-
+                InsertMediaToSelectedList((ListViewItem)lv.Clone());
+                _player.AddMediaToPlayList(media);
+                this.LoadCredits();
+                if (!_player.IsPlaying)
+                {
+                    this.Play();
+                }
                 _lastFormOperation = DateTime.Now;
             }
             catch (NoCreditsException ex)
             {
                 this._lbCredits.Text = ex.Message;
-            }                        
+            }
         }
 
         #endregion
@@ -1166,7 +1177,7 @@ namespace Tigerbox.Forms
         /// <param name="e"></param>
         private void PlayerTimerMethod(Object source, ElapsedEventArgs e)
         {
-            if (_player.IsPlaying)
+            if (_player.IsPlaying && !debug)
             {
                 if (DateTime.Now.Subtract(_lastFormOperation).Seconds > 7)
                 {
@@ -1208,10 +1219,49 @@ namespace Tigerbox.Forms
         private void SetSongsFocus()
         {
             this._listViewFolderSongs.Focus();
-            this._listViewFolderSongs.TopItem = this._listViewFolderSongs.SelectedItems[this._listViewFolderSongs.SelectedIndices[0]];
+            if (this._listViewFolderSongs.Items.Count > 0)
+            {
+                this._listViewFolderSongs.TopItem = this._listViewFolderSongs.Items[0];
+            }
+            
         }
 
         #endregion
 
+        #region Queue
+        private void ReadFromQueue(object sender, ElapsedEventArgs e)
+        {
+            var queue = new MessageQueue(_configurationService.GetConfiguration<string>("PrivateQueue"));
+            TigerBoxMessage message = new TigerBoxMessage();
+            Object o = new Object();
+            System.Type[] arrTypes = new System.Type[2];
+            arrTypes[0] = message.GetType();
+            arrTypes[1] = o.GetType();
+            queue.Formatter = new XmlMessageFormatter(arrTypes);
+            var readed = queue.Receive();
+            if (readed != null)
+            {
+                message = ((TigerBoxMessage)readed.Body);
+                if (message.MessageType == Enums.MessageType.Media)
+                {
+                    this.BeginInvoke((Action)(() =>
+                    {
+                        SelectRemoteMedia(message.Media);
+                    }));
+
+                }
+                else
+                {
+                    this.BeginInvoke((Action)(() =>
+                    {
+                        ExecuteFormActions(message.Action);
+                    }));
+                }
+
+            }
+
+
+        }
+        #endregion
     }
 }

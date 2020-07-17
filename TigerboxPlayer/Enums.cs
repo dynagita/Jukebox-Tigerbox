@@ -27,5 +27,11 @@ namespace Tigerbox.Objects
             DecreaseVolume,
             SetFullScreen
         }
+
+        public enum MessageType
+        { 
+            Action,
+            Media
+        }
     }
 }

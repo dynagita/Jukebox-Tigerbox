@@ -24,15 +24,7 @@ namespace Jukebox_Tigerbox
 
             var mainForm = Tigerbox.IOC.TigerIOC.Container.GetInstance<MainForm>();
 
-            FormThreadManager networkManager = new FormThreadManager(mainForm);
-
-            mainForm.StopThreadManager = () => {
-                networkManager.Stop();
-            };
-
-            networkManager.Start();
-
             Application.Run(mainForm);
-        }
+        }        
     }
 }

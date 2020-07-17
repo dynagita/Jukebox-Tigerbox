@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Messaging;
 using System.Web;
 using Tigerbox.Objects;
 using Tigerbox.SiteControl.Models;
@@ -118,11 +119,11 @@ namespace Tigerbox.SiteControl.Services
 
         public void SendMusicToTigerBox(string folderName, string musicName)
         {
-            var media = GetMediaByName(folderName, musicName);
+            TigerBoxMessage message = new TigerBoxMessage();
+            message.MessageType = Enums.MessageType.Media;
+            message.Media = GetMediaByName(folderName, musicName);
 
-            var data = GetDataToSend(media, TigerActions.Undefined);
-
-            SendDataToServer(data);
+            QueueMedia(message);
         }
 
         public void SendActionToTigerBox(string action)
@@ -151,11 +152,11 @@ namespace Tigerbox.SiteControl.Services
 
         private void SendActionToTigerBox(TigerActions action)
         {
-            var data = new TigerNetworkData();
+            TigerBoxMessage message = new TigerBoxMessage();
+            message.MessageType = Enums.MessageType.Action;
+            message.Action = action;
 
-            data.Action = action;
-
-            SendDataToServer(data);
+            QueueMedia(message);
         }
 
         private TigerNetworkData GetDataToSend(TigerMedia media, TigerActions action)
@@ -248,6 +249,13 @@ namespace Tigerbox.SiteControl.Services
                 }
             }
             return null;
+        }
+
+        private void QueueMedia(TigerBoxMessage message)
+        {
+            var qMessage = new MessageQueue(configurationService.GetConfiguration<string>("PrivateQueue"));
+            qMessage.Send(message);
+
         }
     }
 }
