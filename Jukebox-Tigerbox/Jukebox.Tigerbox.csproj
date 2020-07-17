@@ -98,10 +98,6 @@
       <Project>{515b4de1-7755-4092-adfb-a2a7014a4f1f}</Project>
       <Name>Tigerbox.Forms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tigerbox.Mangers\Tigerbox.Mangers.csproj">
-      <Project>{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}</Project>
-      <Name>Tigerbox.Mangers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TigerIOC\Tigerbox.IOC.csproj">
       <Project>{65c6da52-f188-4b51-a592-b4442bca12a4}</Project>
       <Name>Tigerbox.IOC</Name>

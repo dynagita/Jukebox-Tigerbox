@@ -168,21 +168,7 @@ namespace Tigerbox.SiteControl.Services
             networkData.Media = media;
 
             return networkData;
-        }
-
-        private void SendDataToServer(TigerNetworkData data)
-        {
-            try
-            {
-                TigerTCPClient tcpClient = new TigerTCPClient(configurationService, jsonService);
-                tcpClient.SendData(data);
-            }
-            catch
-            {
-
-                throw;
-            }
-        }
+        }        
 
         public string GetFirstFolderName()
         {

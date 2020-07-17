@@ -60,8 +60,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TigerPage.cs" />
     <Compile Include="TigerSharedData.cs" />
-    <Compile Include="TigerTCPClient.cs" />
-    <Compile Include="TigerTCPServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tigerbox.Services\Tigerbox.Services.csproj">

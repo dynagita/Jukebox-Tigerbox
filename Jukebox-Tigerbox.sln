@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jukebox.Tigerbox", "Jukebox-Tigerbox\Jukebox.Tigerbox.csproj", "{F45CB0EC-1CFE-49CA-A21B-5413EC3B7F99}"
 EndProject
@@ -22,8 +22,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.LetterPanel", "Tigerbox.LetterPanel\Tigerbox.LetterPanel.csproj", "{A0A5120B-22E3-435A-87E5-4A8D5EB9587B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Services", "Tigerbox.Services\Tigerbox.Services.csproj", "{C6D04CD5-2511-48FA-9172-2CE67A826198}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.Mangers", "Tigerbox.Mangers\Tigerbox.Mangers.csproj", "{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tigerbox.SiteControl", "Tigerbox.SiteControl\Tigerbox.SiteControl.csproj", "{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}"
 EndProject
@@ -73,10 +71,6 @@ Global
 		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D04CD5-2511-48FA-9172-2CE67A826198}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3081DCC2-9EFF-4F3A-A554-7A3E6BBBD8F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDD62E6E-662B-49E0-BAFC-4AC6DE2410D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
