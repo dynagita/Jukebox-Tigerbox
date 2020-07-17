@@ -94,73 +94,80 @@ namespace Tigerbox.Forms
         /// </summary>
         private void CustomInitializeComponent(IConfigurationService configuration, IJsonService jsonUtil)
         {
-            _configurationService = configuration;
-
-            if (!debug)
+            try
             {
-                this.TopMost = true;
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.WindowState = FormWindowState.Maximized;
+                _configurationService = configuration;
+
+                if (!debug)
+                {
+                    this.TopMost = true;
+                    this.FormBorderStyle = FormBorderStyle.None;
+                    this.WindowState = FormWindowState.Maximized;
+                }
+
+                this._pages = new TigerPages(configuration, jsonUtil);
+
+                this._sharedList = new TigerSharedData(configuration, jsonUtil);
+
+                this._pages.LoadPages();
+
+                InitializeComponent();
+
+                this._listViewFolderSongs.KeyDown += ListView_KeyEvent;
+                this._listViewFolderSongs.KeyUp += ListView_KeyEvent;
+
+
+                //Player
+                this._player = new TigerPlayer();
+
+                this._player.PlayerStateEvent = new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(ChangePlayerStateEvent);
+
+                this._player.SetChangeEvent();
+                this._generalPanel.Controls.Add(_player);
+                this._player.SetBounds(340, 343, 334, 355);
+                this._player.SetTigerPlayerBounds(340, 343, 334, 355);
+                this._player.SetPlayerVisible(true);
+
+                this._defaultImagePath = configuration.GetConfiguration<string>(Constants.DefaultImagePath);
+
+                string musicIconPath = configuration.GetConfiguration<string>(Constants.MusicIconPath);
+                string videoIconPath = configuration.GetConfiguration<string>(Constants.VideoIconPath);
+
+                System.Drawing.Image musicIcon = System.Drawing.Image.FromFile(musicIconPath);
+                System.Drawing.Image videoIcon = System.Drawing.Image.FromFile(videoIconPath);
+
+                this._listViewFolderSongs.SmallImageList = new ImageList();
+                this._listViewFolderSongs.SmallImageList.Images.Add(musicIcon);
+                this._listViewFolderSongs.SmallImageList.Images.Add(videoIcon);
+
+                this._listViewSelectedSongs.SmallImageList = new ImageList();
+                this._listViewSelectedSongs.SmallImageList.Images.Add(musicIcon);
+                this._listViewSelectedSongs.SmallImageList.Images.Add(videoIcon);
+
+                //Set first page
+                this._pages.SelectedPage = 1;
+
+                this.LoadPage();
+
+                this.letterPanel1.Close();
+
+                this.LoadSharedData();
+
+                this._listViewFolderSongs.SelectedIndices.Add(0);
+
+                StartFullScreenTimer();
+
+                this._listViewSelectedSongs.Scrollable = true;
+
+                _queueTimer = new System.Timers.Timer(500);
+                _queueTimer.Elapsed += new ElapsedEventHandler(ReadFromQueue);
+                _queueTimer.AutoReset = true;
+                _queueTimer.Enabled = true;
             }
-
-            this._pages = new TigerPages(configuration, jsonUtil);
-
-            this._sharedList = new TigerSharedData(configuration, jsonUtil);
-
-            this._pages.LoadPages();
-
-            InitializeComponent();
-
-            this._listViewFolderSongs.KeyDown += ListView_KeyEvent;
-            this._listViewFolderSongs.KeyUp += ListView_KeyEvent;
-
-
-            //Player
-            this._player = new TigerPlayer();
-
-            this._player.PlayerStateEvent = new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(ChangePlayerStateEvent);
-
-            this._player.SetChangeEvent();
-            this._generalPanel.Controls.Add(_player);
-            this._player.SetBounds(340, 343, 334, 355);
-            this._player.SetTigerPlayerBounds(340, 343, 334, 355);
-            this._player.SetPlayerVisible(true);
-
-            this._defaultImagePath = configuration.GetConfiguration<string>(Constants.DefaultImagePath);
-
-            string musicIconPath = configuration.GetConfiguration<string>(Constants.MusicIconPath);
-            string videoIconPath = configuration.GetConfiguration<string>(Constants.VideoIconPath);
-
-            System.Drawing.Image musicIcon = System.Drawing.Image.FromFile(musicIconPath);
-            System.Drawing.Image videoIcon = System.Drawing.Image.FromFile(videoIconPath);
-
-            this._listViewFolderSongs.SmallImageList = new ImageList();
-            this._listViewFolderSongs.SmallImageList.Images.Add(musicIcon);
-            this._listViewFolderSongs.SmallImageList.Images.Add(videoIcon);
-
-            this._listViewSelectedSongs.SmallImageList = new ImageList();
-            this._listViewSelectedSongs.SmallImageList.Images.Add(musicIcon);
-            this._listViewSelectedSongs.SmallImageList.Images.Add(videoIcon);
-
-            //Set first page
-            this._pages.SelectedPage = 1;
-
-            this.LoadPage();
-
-            this.letterPanel1.Close();
-
-            this.LoadSharedData();
-
-            this._listViewFolderSongs.SelectedIndices.Add(0);
-
-            StartFullScreenTimer();
-
-            this._listViewSelectedSongs.Scrollable = true;
-
-            _queueTimer = new System.Timers.Timer(500);
-            _queueTimer.Elapsed += new ElapsedEventHandler(ReadFromQueue);
-            _queueTimer.AutoReset = true;
-            _queueTimer.Enabled = true;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
