@@ -60,7 +60,9 @@ namespace Tigerbox.Objects
                     }
 
                     // You can add some meaningful code to this catch block.
-                    catch { };
+                    catch
+                    {
+                    };
                 }
             }
         }

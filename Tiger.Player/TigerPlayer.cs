@@ -43,7 +43,7 @@ namespace Tiger.Player
         /// </summary>
         public void SetChangeEvent()
         {
-            if (PlayerStateEvent==null)
+            if (PlayerStateEvent == null)
             {
                 throw new Exception("You aren't able to set PlayStateChange event, because you haven't defined the PlayerStateEvent delegate.");
             }
@@ -86,16 +86,16 @@ namespace Tiger.Player
         /// Insert a new media into playlist
         /// </summary>
         /// <param name="tigerMedia">TigerMedia who will be inserted into playlist</param>
-        public void AddMediaToPlayList(TigerMedia tigerMedia)
+        public double AddMediaToPlayList(TigerMedia tigerMedia)
         {
-            AddMediaToPlayList(tigerMedia.Path);
+            return AddMediaToPlayList(tigerMedia.Path);
         }
 
         /// <summary>
         /// Insert a new media into playlist
         /// </summary>
         /// <param name="path">Song's path who will be inserted into playlist</param>
-        public void AddMediaToPlayList(string path)
+        public double AddMediaToPlayList(string path)
         {
             if (_mediaPlayer == null)
             {
@@ -103,7 +103,14 @@ namespace Tiger.Player
             }
 
             var media = this._mediaPlayer.newMedia(path);
-            this._mediaPlayer.currentPlaylist.appendItem(media);
+
+            var duration = media.duration;
+            if (duration > 0)
+            {
+                this._mediaPlayer.currentPlaylist.appendItem(media);
+            }
+
+            return duration;
         }
 
         /// <summary>
@@ -112,11 +119,12 @@ namespace Tiger.Player
         public void Play()
         {
             try
-            {                
+            {
                 _mediaPlayer.Ctlcontrols.play();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                throw;
             }
         }
 
@@ -134,7 +142,7 @@ namespace Tiger.Player
                     this._mediaPlayer.Ctlcontrols.play();
                 }
             }
-            catch{}
+            catch { }
         }
 
         /// <summary>
@@ -151,7 +159,7 @@ namespace Tiger.Player
                 _mediaPlayer.SetBounds(x, y, width, height, BoundsSpecified.None);
                 _mediaPlayer.Width = width;
                 _mediaPlayer.Height = height;
-            }            
+            }
         }
 
         /// <summary>
@@ -174,7 +182,7 @@ namespace Tiger.Player
                     this._mediaPlayer.Hide();
                     this.Hide();
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -186,7 +194,7 @@ namespace Tiger.Player
             if (_mediaPlayer != null)
             {
                 _mediaPlayer.fullScreen = !IsFullScreen;
-            }            
+            }
         }
 
         /// <summary>
@@ -214,7 +222,7 @@ namespace Tiger.Player
                 {
                     this._mediaPlayer.settings.volume -= 5;
                 }
-            }            
+            }
         }
 
         public void DisposePlayer()
@@ -231,7 +239,7 @@ namespace Tiger.Player
         {
             if (_mediaPlayer.currentPlaylist.count > 0)
             {
-                for (int i = (_mediaPlayer.currentPlaylist.count-1); i >= 0; i--)
+                for (int i = (_mediaPlayer.currentPlaylist.count - 1); i >= 0; i--)
                 {
                     _mediaPlayer.currentPlaylist.removeItem(_mediaPlayer.currentPlaylist.Item[i]);
                 }
@@ -242,7 +250,7 @@ namespace Tiger.Player
         {
             if (_lastPlayedMedia != null)
             {
-                _mediaPlayer.currentPlaylist.removeItem(_lastPlayedMedia);   
+                _mediaPlayer.currentPlaylist.removeItem(_lastPlayedMedia);
             }
 
             if (_mediaPlayer.currentPlaylist.count == 0)
@@ -253,7 +261,7 @@ namespace Tiger.Player
             {
                 _lastPlayedMedia = _mediaPlayer.currentMedia;
             }
-            
+
         }
     }
 }

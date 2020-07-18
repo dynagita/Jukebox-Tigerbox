@@ -144,63 +144,49 @@ namespace Tigerbox.Objects
             {
                 return _medias;
             }
-        }
-
-        /// <summary>
-        /// Shift a folder to right when sorting
-        /// </summary>
-        /// <param name="initial">Initial position</param>
-        /// <param name="list">List ordering</param>
-        private static void ShiftRight(int initial, ref List<TigerFolder> list)
-        {
-            list.Add(new TigerFolder());
-            for (int i = list.Count - 1; i > initial; i--)
-            {
-                list[i] = list[i - 1];
-            }
-        }
+        }       
 
         /// <summary>
         /// Sort TigerFolders by name
         /// </summary>
         /// <param name="diretorios">TigerFolder list</param>
-        public static void SortDirectories(List<TigerFolder> diretorios)
+        public static List<TigerFolder> SortDirectories(List<TigerFolder> diretorios)
         {
+            
             List<TigerFolder> result = new List<TigerFolder>();
             for (int i = 0; i < diretorios.Count; i++)
             {
+                Console.WriteLine($"Sorting itens {i}/{diretorios.Count}");
                 if (i == 0)
                 {
                     result.Add(diretorios[i]);
                 }
                 else
                 {
-                    for (int j = 0; j < result.Count; j++)
-                    {
-                        string insertedName = result[j].Name;
-                        if (string.Compare(insertedName, diretorios[i].Name, true) < 0)
-                        {
-                            //O diretório já inserido é menor que o diretório a ser inserido
-                            if ((j + 1) < result.Count)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                result.Add(diretorios[i]);
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            //O diretório a ser inserido é menor que o diretório já inserido
-                            ShiftRight(j, ref result);
-                            result[j] = diretorios[i];
-                            break;
-                        }
-                    }
+                    int index = GetIndexToInsert(result, diretorios[i].Name);
+                    result.Insert(index, diretorios[i]);
                 }
             }
+            return result;
+        }
+
+        private static int GetIndexToInsert(List<TigerFolder> diretorios, string name)
+        {
+            int result = 0;
+            for (int i = 0; i < diretorios.Count; i++)
+            {
+                if (string.Compare(diretorios[i].Name, name, true)==-1)
+                {
+                    result = i;
+                }
+                else
+                {
+                    result = i;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -579,6 +579,7 @@ namespace Tigerbox.Forms
         /// <param name="e"></param>
         private void ChangePlayerStateEvent(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
+
             if (e.newState == 3)
             {
                 this.TakeOutFirstSelectedSong();
@@ -787,6 +788,15 @@ namespace Tigerbox.Forms
             }
         }
 
+        private void TakeOutLastSelectedSong()
+        {
+            if (this._listViewSelectedSongs.Items.Count > 0)
+            {
+                this._listViewSelectedSongs.Items.RemoveAt(this._listViewSelectedSongs.Items.Count-1);
+                this._sharedList.SharedList.RemoveAt(this._sharedList.SharedList.Count()-1);
+            }
+        }
+
         /// <summary>
         /// Set the selected folder
         /// </summary>
@@ -895,8 +905,6 @@ namespace Tigerbox.Forms
         {
             try
             {
-                _sharedList.DecreaseCredit();
-
                 var mediaIndex = this._listViewFolderSongs.SelectedIndices[0];
 
                 var media = this._pages.SelectedFolder
@@ -909,16 +917,38 @@ namespace Tigerbox.Forms
                                       .Items[mediaIndex];
 
                 InsertMediaToSelectedList((ListViewItem)lv.Clone());
-                _player.AddMediaToPlayList(media);
-                this.LoadCredits();
-                if (!_player.IsPlaying)
+
+                var duration = _player.AddMediaToPlayList(media);
+                if (duration > 0)
                 {
-                    this.Play();
+                    _sharedList.DecreaseCredit();
+
+                    this.LoadCredits();
+                    if (!_player.IsPlaying)
+                    {
+                        this.Play();
+                    }
+                }
+                else
+                {
+                    ThreatCorruptedFile();
                 }
             }
             catch (NoCreditsException ex)
             {
                 this._lbCredits.Text = ex.Message;
+            }
+        }
+
+        private void ThreatCorruptedFile()
+        {
+            if (_sharedList.SharedList.Any())
+            {
+                string text = "***Corrupted File Found!***";
+                _lbCredits.ForeColor = System.Drawing.Color.Red;
+                this._lbCredits.BackColor = System.Drawing.Color.Yellow;
+                _lbCredits.Text = text;
+                TakeOutLastSelectedSong();
             }
         }
 
@@ -979,15 +1009,16 @@ namespace Tigerbox.Forms
             int index = 0;
             foreach (var item in _sharedList.SharedList)
             {
-                _player.AddMediaToPlayList(item);
-                var lv = GetMediaItem(item, index);
-                this._listViewSelectedSongs.Items.Insert(index, lv);
-                index++;
+                var duration = _player.AddMediaToPlayList(item);
+                if (duration > 0)
+                {
+                    var lv = GetMediaItem(item, index);
+                    this._listViewSelectedSongs.Items.Insert(index, lv);
+                    index++;
+                }
             }
-            if (_sharedList.SharedList.Any())
-            {
-                this.Play();
-            }
+            _sharedList.SharedList.Clear();
+            this.Play();
         }
 
         /// <summary>
@@ -996,6 +1027,8 @@ namespace Tigerbox.Forms
         private void LoadCredits()
         {
             this._lbCredits.Text = string.Format("Credits: {0}", _sharedList.Credits);
+            this._lbCredits.ForeColor = System.Drawing.Color.White;
+            this._lbCredits.BackColor = System.Drawing.Color.Transparent;
         }
 
         /// <summary>
@@ -1104,18 +1137,27 @@ namespace Tigerbox.Forms
 
             for (int i = 0; i < Constants.QuantityPerPage; i++)
             {
-                var pictureBox = this.FindPictureBoxByNumber(i + 1);
-                if (i < folders.Count)
+                try
                 {
-                    var folder = folders.ElementAt(i);
-                    pictureBox.BackColor = System.Drawing.Color.Red;
-                    pictureBox.Visible = true;
-                    SetPicture(pictureBox, folder.ImagePath);
+                    var pictureBox = this.FindPictureBoxByNumber(i + 1);
+                    if (i < folders.Count)
+                    {
+                        var folder = folders.ElementAt(i);
+                        pictureBox.BackColor = System.Drawing.Color.Red;
+                        pictureBox.Visible = true;
+                        SetPicture(pictureBox, folder.ImagePath);
+                    }
+                    else
+                    {
+                        pictureBox.Visible = false;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    pictureBox.Visible = false;
+
+                    throw ex;
                 }
+
             }
 
             this.SetSelectedFolder();
@@ -1128,9 +1170,7 @@ namespace Tigerbox.Forms
         public void SelectRemoteMedia(TigerMedia media)
         {
             try
-            {
-                _sharedList.DecreaseCredit();
-
+            {                
                 var mediaIndex = -1;
 
                 _sharedList.InsertNewMedia<TigerMedia>(media);
@@ -1138,13 +1178,23 @@ namespace Tigerbox.Forms
                 ListViewItem lv = GetMediaItem(media, mediaIndex);
 
                 InsertMediaToSelectedList((ListViewItem)lv.Clone());
-                _player.AddMediaToPlayList(media);
-                this.LoadCredits();
-                if (!_player.IsPlaying)
+                
+                var duration = _player.AddMediaToPlayList(media);
+                if (duration > 0)
                 {
-                    this.Play();
+                    _sharedList.DecreaseCredit();
+
+                    this.LoadCredits();
+
+                    if (!_player.IsPlaying)
+                    {
+                        this.Play();
+                    }
                 }
-                _lastFormOperation = DateTime.Now;
+                else
+                {
+                    ThreatCorruptedFile();
+                }
             }
             catch (NoCreditsException ex)
             {
@@ -1230,7 +1280,7 @@ namespace Tigerbox.Forms
             {
                 this._listViewFolderSongs.TopItem = this._listViewFolderSongs.Items[0];
             }
-            
+
         }
 
         #endregion

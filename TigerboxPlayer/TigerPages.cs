@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tigerbox.Exceptions;
+using System.Windows.Forms;
 
 namespace Tigerbox.Objects
 {
@@ -173,13 +174,18 @@ namespace Tigerbox.Objects
             }
 
             //Sort directories
-            TigerFolder.SortDirectories(musicDirectoriesPath);
+            musicDirectoriesPath = TigerFolder.SortDirectories(musicDirectoriesPath);
+            
+            Console.Clear();
 
             TigerPage page = new TigerPage();
+            
+            List<string> corruptedImages = new List<string>();
+
             for (int i = 0; i < musicDirectoriesPath.Count; i++)
             {
                 var dir = musicDirectoriesPath[i];
-                Console.WriteLine(string.Format("Updating TigerboxDatabase - Directory: {0}", dir));
+                Console.WriteLine(string.Format("Updating TigerboxDatabase - Directory: {0}", dir.Name));
                 //Get directories files
                 var files = Directory.GetFiles(dir.Path);
                 for (int k = 0; k < files.Length; k++)
@@ -203,7 +209,15 @@ namespace Tigerbox.Objects
                         (tMedia.Type.ToLower().Contains("gif"))
                         )
                     {
+
+                        if (tMedia.IsImage && !IsImageOk(tMedia.Path))
+                        {
+                            corruptedImages.Add(tMedia.Path);
+                        }
+                        else
+                        {
                             dir.Medias.Add(tMedia);
+                        }                        
                     }
                 }
 
@@ -219,7 +233,39 @@ namespace Tigerbox.Objects
             {
                 InsertNewPage(page);
             }
+            
+            Console.Clear();
 
+            if (corruptedImages.Any())
+            {
+                Console.WriteLine($"*******************************************************************");
+                Console.WriteLine($"***********************Corrupted files found***********************");
+                Console.WriteLine($"*******************************************************************");
+
+                foreach (var item in corruptedImages)
+                {
+                    Console.WriteLine(item);
+                }
+
+                Console.WriteLine($"We just found {corruptedImages.Count} image(s) corrupted. Would you like to delete them? Y - Yes / N - No");
+                
+                var answer = Console.ReadLine();
+                if (answer.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var item in corruptedImages)
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(item);
+                            Console.WriteLine($"Deleted {item}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error deleting {item}: {ex.Message}");
+                        }                        
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -345,6 +391,23 @@ namespace Tigerbox.Objects
             }
 
             _pages.FirstOrDefault(x => x.Page == SelectedPage).Folders[0].Selected = true;
+        }
+
+        private static bool IsImageOk(string url)
+        {
+            bool result = true;
+
+            try
+            {
+                PictureBox pictureBox = new PictureBox();
+                pictureBox.Load(url);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }                       
+
+            return result;
         }
     }
 }
